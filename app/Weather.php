@@ -6,21 +6,18 @@ use App\Services\ApiRequestService;
 
 class Weather
 {
-    private const BASE_URL = 'api.openweathermap.org/data/2.5/weather';
-    private const APPID = '12ebe7871a02e9fbdd88064aadb5c124';
-    private const LANG = 'ru';
-
+    // main method that prepares the request and processes the response from the API
     public static function apiRequest(array $data): array
     {
         // form query parameters to Guzzle client
         $params = [];
-        $params['query']['appid'] = self::APPID;
-        $params['query']['lang'] = self::LANG;
+        $params['query']['appid'] = config('api.appId');
+        $params['query']['lang'] = config('api.lang');
         $params['query']['q'] = $data['q'];
         $params['query']['units'] = $data['units'];
 
         // execute API request
-        $response = ApiRequestService::apiGetRequest(self::BASE_URL, $params);
+        $response = ApiRequestService::apiGetRequest(config('api.baseUrl'), $params);
 
         // handle 400+ response codes (errors)
         if ($response['cod'] >= 400) {
